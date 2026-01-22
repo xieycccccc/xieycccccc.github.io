@@ -1,0 +1,53 @@
+import { defineConfig } from 'vitepress'
+
+// https://vitepress.dev/reference/site-config
+export default defineConfig({
+  title: "xieyccccc's web",
+  description: "Learning Memory",
+  themeConfig: {
+    siteTitle: 'BROOFDOG SPACE',
+    // https://vitepress.dev/reference/default-theme-config
+    nav: [
+      { text: 'Home', link: '/' },
+      { text: 'Will Learn', link: '/will_learn' },
+      { text: 'Learned', link: '/learned' },
+      { text: 'Learning...', link: '/learning' }
+    ],
+
+    sidebar: {
+      '/will_learn/': [
+        {
+          text: 'Will Learn',
+          items: [
+            { text: 'HTML & CSS', link: '/will_learn/html_css' },
+            { text: 'JavaScript', link: '/will_learn/javascript' },
+            { text: 'TypeScript', link: '/will_learn/typescript' },
+            { text: 'Vue', link: '/will_learn/vue' }
+          ]
+        }
+      ],
+      '/learned/': [
+        {
+          text: 'Learned',
+          items: [
+            { text: 'Git Basics', link: '/learned/git_basics' },
+            { text: 'Markdown Guide', link: '/learned/markdown_guide' }
+          ]
+        }
+      ],
+      '/learning/': [
+        {
+          text: 'Learning...',
+          items: [
+            { text: 'React', link: '/learning/react' },
+            { text: 'Node.js', link: '/learning/nodejs' }
+          ]
+        }
+      ]
+    },
+
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+    ]
+  }
+})
