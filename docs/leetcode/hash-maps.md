@@ -7,28 +7,35 @@
 ## 基本操作（C++实现）
 
 1. 初始化
+```cpp
 unordered_map<int, int> hash_table; 
+```
 2. 插入元素
-hash_table[key] = value;
+```cpp 
+hash_table[key] = value; 
+```
 
 3. 查找元素
+```cpp
 auto it = hash_table.find(key);
 if (it != hash_table.end()) {
     // 元素存在，it->second 是对应的值
 } else {
     // 元素不存在
 }
-
+```
 4. 删除元素
+```cpp
 hash_table.erase(key);
-
+```
 5. 遍历哈希表
+```cpp
 for (const auto& pair : hash_table) {
     int key = pair.first;
     int value = pair.second;
     // 处理 key 和 value
 }
-
+```
 ## 示例代码：两数之和
 选用值作为键，索引作为值进行存储（因为我们查的是target-当前值是否存在）
 ```cpp
