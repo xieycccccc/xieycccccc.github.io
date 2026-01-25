@@ -51,6 +51,7 @@ export default defineConfig({
           text: 'LeetCode Hot 100',
           items: [
             { text: '哈希表', link: '/leetcode/hash-maps' },
+            { text: '双指针', link: '/leetcode/two-pointers' }
           ]
         }
       ],
