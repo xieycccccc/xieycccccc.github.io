@@ -1,13 +1,19 @@
 # 双指针
 
 ## 介绍
-双指针是一种常用的算法技巧，通常用于处理数组或字符串等线性数据结构。它涉及使用两个指针（或索引）来遍历数据结构，以实现高效的解决方案。双指针技术可以分为两种主要类型：
+
+双指针是一种常用的算法技巧，通常用于处理数组或字符串等线性数据结构。它涉及使用两个指针（或索引）来遍历数据结构，以实现高效的解决方案。
+
+双指针技术主要分为以下两类：
+
 1. **快慢指针**：一个指针移动得比另一个指针快，常用于检测链表中的环或寻找中间节点。
 2. **左右指针**：两个指针分别从数据结构的两端向中间移动，常用于排序数组的合并、寻找目标和等问题。
 
+## 题目解析
 
-## 示例
-### leetcode 283 . 移动零（快慢指针）
+### 283. 移动零
+**类型**：快慢指针
+
 使用双指针，左指针指向当前已经处理好的序列的尾部，右指针指向待处理序列的头部。
 
 ```cpp
@@ -24,17 +30,18 @@ public:
         }
     }
 };
-
-作者：力扣官方题解
-链接：https://leetcode.cn/problems/move-zeroes/solutions/489622/yi-dong-ling-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
-### leetcode 11 . 盛最多水的容器（左右指针）
+> 来源：[力扣官方题解](https://leetcode.cn/problems/move-zeroes/solutions/489622/yi-dong-ling-by-leetcode-solution/)
 
-一开始先是直接双重for循环但是时间不够，开始思考规律，想到可以先找到第一第二大的两根，然后分别向左右移动，左右移动扩展时找的是左边或者右边最高的中更高的一根，直到左右指针到两个边界，最后在debug挺久后也是AC了。
-虽然对比标答差了一点，但是也算是自己思考出来的，还是挺开心的。
+---
+
+### 11. 盛最多水的容器
+**类型**：左右指针
+
+#### 初步尝试
+一开始先是直接双重 `for` 循环但是时间不够，开始思考规律。想到可以先找到第一、第二大的两根柱子，然后分别向左右移动。左右移动扩展时，找左边或者右边最高的中更高的一根，直到左右指针到两个边界。虽然代码比较复杂，最后 debug 挺久后也是 AC 了。
+
 ```cpp
 class Solution {
 public:
@@ -111,11 +118,11 @@ public:
 };
 ```
 
-标答：（左右指针）
-左右指针分别指向数组的两端，计算当前面积后，移动较短的那一边的指针，直到两个指针相遇。
+#### 优化解法（标准双指针）
+原理：左右指针分别指向数组的两端，计算当前面积后，移动**较短**的那一边的指针，直到两个指针相遇。
 
-原理：
-从两端开始计算面积，当移动较短的边时，有可能找到更高的边，从而增加面积。移动较长的边不会增加面积，因为面积受限于较短的边，且移动两端的边距离一定会减少，这样之后可以相当于将那条较短的边扔掉了，继续从边界向中间走。
+从两端开始计算面积，当移动较短的边时，有可能找到更高的边，从而增加面积。如果移动较长的边，面积受限于较短的边且宽度减小，面积一定减少。因此，每次移动短边就像是“扔掉”了限制当前高度的短板，尝试寻找更好的机会。
+
 ```cpp
 class Solution {
 public:
@@ -135,21 +142,25 @@ public:
         return ans;
     }
 };
-
-作者：力扣官方题解
-链接：https://leetcode.cn/problems/container-with-most-water/solutions/207215/sheng-zui-duo-shui-de-rong-qi-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+> 来源：[力扣官方题解](https://leetcode.cn/problems/container-with-most-water/solutions/207215/sheng-zui-duo-shui-de-rong-qi-by-leetcode-solution/)
 
+---
 
-### leetcode 15 . 三数之和（左右指针）
-解析：
-正常的想法是使用三重循环进行遍历，但是直接遍历一是复杂度很高，O(N^3),二是有重复解的情况，故想到进行一些性质的利用。首先肯定需要排序，让数组有序化（这里假设为升序的）即找到数组(a,b,c),其中a<=b<=c
-然后对于第一重的a，寻找剩下的部分。找到后由于题目需要去重，就是a不能重复，故在遍历a时如果发现和上一个a相同就跳过。
-对于剩下的部分，由于是1增函数的性质，可以使用双指针，左指针从b开始，右指针从c开始，计算sum=a+b+c
-如果sum==-a,则找到一个解，记录下来，然后左指针右移，右指针左移，同时跳过重复的b和c
-小于就说明要左边的向右走，大于就说明右边的向左走
+### 15. 三数之和
+**类型**：左右指针
+
+**解析**：
+正常的想法是使用三重循环进行遍历，但是 O(N³) 复杂度过高，且处理重复解比较麻烦。
+
+我们可以利用排序后的性质：
+1.  首先对数组进行排序（升序）。
+2.  遍历第一个数 `nums[i]`（作为三元组中的 `a`）。如果 `nums[i]` 和上一个数相同，跳过以去重。
+3.  对于剩下的两个数 `nums[j]` (b) 和 `nums[k]` (c)，在 `[i+1, n-1]` 区间内使用**双指针**：
+    *   计算 `sum = nums[i] + nums[j] + nums[k]`。
+    *   如果 `sum == 0`，记录解，并将左右指针分别向内移动，同时跳过重复的数值。
+    *   如果 `sum < 0`，说明需要更大的数，左指针 `j` 右移。
+    *   如果 `sum > 0`，说明需要更小的数，右指针 `k` 左移。
 
 ```cpp
 class Solution {
@@ -198,85 +209,104 @@ public:
 };
 ```
 
+---
 
-### leetcode 42 . 接雨水（左右指针）
-解析：
+### 42. 接雨水
+**类型**：多种解法（包含双指针）
 
-首先分析雨水的特性：
-雨水的多少取决于当前位置左右两边的最高墙的较小值与当前位置墙的高度之差
-最开始想到的是遍历每个位置，然后向左向右遍历找最高墙，复杂度O(N^2)，肯定不行
+**解析**：
+雨水的多少取决于当前位置左右两边的最高墙的较小值与当前位置墙的高度之差。
+暴力解法需要对每个位置遍历寻找左右最大值，复杂度 O(N²)，不可接受。
 
-#### 1.动态规划
-然后想到可以使用两个数组存储每个位置左边和右边的东西，但是我没有想到动态规划可以达到O(N)的复杂度
-
-从左到右遍历一遍，记录每个位置左边的最高墙
-从右到左遍历一遍，记录每个位置右边的最高墙
-LeftMax[i] = max(LeftMax[i-1],height[i])
-RightMax[i] = max(RightMax[i+1],height[i])
-
+#### 方法 1：动态规划
+使用两个数组预处理存储每个位置左边和右边的最大高度，将寻找最大值的时间降为 O(1)。
+*   `LeftMax[i] = max(LeftMax[i-1], height[i])`
+*   `RightMax[i] = max(RightMax[i+1], height[i])`
+*   最后遍历计算 `ans += min(LeftMax[i], RightMax[i]) - height[i]`
 
 ```cpp
 class Solution {
 public:
     int trap(vector<int>& height) {
+        if (height.size() < 2) return 0;
+        
+        int n = height.size();
+        vector<int> L(n, height[0]);
+        vector<int> R(n, height[n - 1]);
 
-        // 存储每个元素左右的max
-        vector<int> L(height.size(), height[0]);
-        vector<int> R(height.size(), height[height.size() - 1]);
+        for (int i = 1; i < n; i++) L[i] = max(height[i], L[i - 1]);
+        for (int j = n - 2; j >= 0; j--) R[j] = max(height[j], R[j + 1]);
 
         int ans = 0;
-
-        if (height.size()<2){
-            return 0;
+        for (int i = 1; i < n - 1; i++) {
+            ans += max(0, min(L[i], R[i]) - height[i]);
         }
-
-        for (int i = 2; i < height.size() ; i++) {
-            L[i] = max(height[i - 1], L[i - 1]);
-            //cout << i << L[i]<<endl;
-        }
-
-        for (int j = height.size() - 3; j >= 1; j--) {
-            R[j] = max(height[j + 1], R[j + 1]);
-            //cout << j << R[j]<<endl;
-        }
-
-        for (int i = 1;i<height.size()-1;i++){
-            ans = ans+max(0,min(L[i],R[i])-height[i]);
-        }
-
         return ans;
     }
 };
 ```
 
-#### 2.双指针
+#### 方法 2：双指针
+动态规划使用了 O(N) 的空间。利用双指针可以将空间复杂度优化到 O(1)。
 
-上一个动态规划的解法使用了O(N)的额外空间，实际上我们可以使用双指针来优化空间复杂度到O(1)。
+**原理**：
+维护左右两个指针 `left` 和 `right`，以及 `leftMax` 和 `rightMax`。
+*   当 `height[left] < height[right]` 时，必有 `leftMax < rightMax`（至少对于当前 left 来说，右边有个更高的挡着）。此时 `left` 处的接水量由 `leftMax` 决定。
+*   反之亦然。
 
-原理：
-只需要维护两个指针，分别指向数组的两端，同时维护两个变量，记录当前左边和右边的最高墙。
-根据当前左边和右边的最高墙，决定移动哪个指针，并计算当前位置的雨水量。
+```cpp
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int left = 0, right = height.size() - 1;
+        int leftMax = 0, rightMax = 0;
+        int ans = 0;
+        while (left < right) {
+            leftMax = max(leftMax, height[left]);
+            rightMax = max(rightMax, height[right]);
+            if (height[left] < height[right]) {
+                ans += leftMax - height[left];
+                left++;
+            } else {
+                ans += rightMax - height[right];
+                right--;
+            }
+        }
+        return ans;
+    }
+};
+```
 
-假设我们有两个指针：
-left：从数组最左侧（下标 0）开始向右移动
-right：从数组最右侧（下标 n-1）开始向左移动
-同时维护两个变量：
-leftMax：记录 left 指针左侧（包括自身）的最大高度
-rightMax：记录 right 指针右侧（包括自身）的最大高度
-当 height[left] < height[right] 时：left 位置的接水量只由 leftMax 决定（因为右侧一定有比 height[left] 更高的柱子，rightMax 必然 ≥ leftMax）。
-当 height[left] ≥ height[right] 时：right 位置的接水量只由 rightMax 决定（因为左侧一定有比 height[right] 更高的柱子，leftMax 必然 ≥ rightMax）。
+#### 方法 3：单调栈
+感觉是对于物理现象的一个很好的模拟。
+单调栈法的核心是维护一个**单调递减栈**（栈底大、栈顶小），栈里存放下标。
+当遇到一个比栈顶高度大的元素时，说明形成了一个“凹槽”：
+*   **当前元素**：凹槽右边界
+*   **栈顶元素**：凹槽底部（弹出处理）
+*   **新栈顶元素**：凹槽左边界
 
-#### 3.单调栈
-感觉不像人类能想到的解法，直接看题解，但是感觉是很符合重力的感觉了
-一、先搞懂：单调栈法的核心逻辑
-接雨水的本质是找 “凹槽”—— 一个低的位置，左右都有更高的柱子，才能接住水。单调栈法的核心就是：
-维护一个单调递减栈（栈底到栈顶的下标对应的高度越来越小），栈里存的是数组的下标（不是高度值），这样既能拿到高度，又能计算宽度。
-遍历数组时，每遇到一个柱子：
-如果当前柱子高度 ≤ 栈顶下标对应的高度 → 直接入栈（保持栈的单调递减）；
-如果当前柱子高度 > 栈顶下标对应的高度 → 说明找到了一个 “凹槽”：
-栈顶元素 = 凹槽的底部（最低处）；
-栈顶的下一个元素 = 凹槽的左边界；
-当前元素 = 凹槽的右边界；
-计算这个凹槽能接的雨水量，然后弹出栈顶（底部），继续检查新的栈顶是否还能和当前元素形成凹槽，直到栈恢复单调递减。
-二、先明确：什么是 “单调递减栈”？
-举个简单例子，栈里存的是下标，对应的高度是 [3,2,1]，这就是单调递减栈。如果新元素高度是 0，直接入栈（变成 [3,2,1,0]）；如果新元素高度是 2，比栈顶的 1 大，就触发 “找凹槽” 的逻辑。
+计算水量 = `(min(左边界高, 右边界高) - 底部高) * 宽度`。
+
+```cpp
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        stack<int> st;
+        int ans = 0;
+        for (int i = 0; i < height.size(); i++) {
+            while (!st.empty() && height[i] > height[st.top()]) {
+                int top = st.top();
+                st.pop();
+                if (st.empty()) break;
+                
+                int left = st.top();
+                int w = i - left - 1;
+                int h = min(height[left], height[i]) - height[top];
+                ans += w * h;
+            }
+            st.push(i);
+        }
+        return ans;
+    }
+};
+```
