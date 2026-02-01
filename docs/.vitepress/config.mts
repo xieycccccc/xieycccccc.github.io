@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "xieyccccc's 的学习空间",
+  title: "xieyccccc's 学习空间",
   description: "记录自己的学习笔记和成长历程💪",
   themeConfig: {
     siteTitle: 'BROOFDOG SPACE',
