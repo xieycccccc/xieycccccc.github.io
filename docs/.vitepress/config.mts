@@ -2,8 +2,8 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "xieyccccc's web",
-  description: "Learning Memory",
+  title: "xieyccccc's 的学习空间",
+  description: "记录自己的学习笔记和成长历程💪",
   themeConfig: {
     siteTitle: 'BROOFDOG SPACE',
     // https://vitepress.dev/reference/default-theme-config
@@ -61,7 +61,7 @@ export default defineConfig({
           ]
         }
       ],
-      'LLM彻底学习': [
+      '/llm_study/': [
         {
           text: 'LLM彻底学习',
           items: [

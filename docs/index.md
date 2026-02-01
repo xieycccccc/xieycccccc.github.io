@@ -5,21 +5,21 @@ layout: home
 hero:
   name: "xieyccccc's web"
   text: "Learning Memory"
-  tagline: My great project tagline
+  tagline: 学习·记录·成长💪
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: 猛攻Leetcode中....
+      link: /leetcode
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: GitHub主页
+      link: https://github.com/xieycccccc/xieycccccc.github.io
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: 基础算法
+    details: Leetcode学习记录与感想
+  - title: LLM彻底学习
+    details: LLM学习思路和从底层的学习过程
+  - title: To be continued...
+    details: 未完待续
 ---
 
