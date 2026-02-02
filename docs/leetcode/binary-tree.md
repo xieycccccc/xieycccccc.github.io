@@ -474,3 +474,81 @@ public:
     }
 };
 ```
+
+
+### 199 . 二叉树的右视图
+方法一：层序遍历
+直接层序遍历，每层的最后一个节点就是右视图中的节点。
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+
+        vector<int> ans;
+        if (!root) {
+            return ans;
+        }
+        queue<TreeNode*> q;
+        q.push(root);
+        vector<vector<int>> layer_list;
+        vector<int> layer;
+
+        while (!q.empty()) {
+            int all = q.size();
+            layer.clear();
+            for (int i = 0; i < all; i++) {
+                TreeNode* node = q.front();
+                layer.push_back(node->val);
+                q.pop();
+                if (node->left) {
+                    q.push(node->left);
+                }
+                if (node->right) {
+                    q.push(node->right);
+                }
+            }
+            layer_list.push_back(layer);
+        }
+
+        for (int i = 0; i < layer_list.size(); i++) {
+            ans.push_back(layer_list[i][layer_list[i].size() - 1]);
+        }
+        return ans;
+    }
+};
+```
+
+方法二：DFS
+先访问右子节点，每个层的第一个节点就是右视图中的节点,简单递归一下就好了
+```cpp
+class Solution {
+public:
+    vector<int> ans;
+    void dfs(TreeNode* root,int layer){
+        if (!root){
+            return ;
+        }if (ans.size()<layer){
+            ans.push_back(root->val);
+        }
+        dfs(root->right,layer+1);
+        dfs(root->left,layer+1);
+    }
+
+    vector<int> rightSideView(TreeNode* root) {
+        dfs(root,1);
+        return ans;
+    }
+};
+```

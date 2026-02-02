@@ -13,7 +13,8 @@ export default defineConfig({
       { text: 'Learned', link: '/learned' },
       { text: 'Learning...', link: '/learning' },
       { text: 'LeetCode Hot 100', link: '/leetcode/' },
-      { text: 'LLM彻底学习', link: '/llm_study' }
+      { text: 'LLM彻底学习', link: '/llm_study' },
+      {text: '股市研究入门', link: '/money_making'}
     ],
 
     sidebar: {
@@ -66,6 +67,14 @@ export default defineConfig({
           text: 'LLM彻底学习',
           items: [
             { text: '基本理解', link: '/llm_study/overall' }
+          ]
+        }
+      ],
+      '/money_making/': [
+        {
+          text: '股市研究入门',
+          items: [
+            { text: '基础知识', link: '/money_making/basics' }
           ]
         }
       ]
