@@ -459,7 +459,6 @@ public:
                 stk.push(root);
                 root = root->left;
                 
-
             }
             count++;
             root = stk.top();
@@ -551,4 +550,117 @@ public:
         return ans;
     }
 };
+```
+
+### 114 . 二叉树展开为链表
+方法一：前序遍历+一次遍历
+使用栈的前序遍历二叉树，并将节点按访问顺序存储在一个列表中。然后，我们遍历这个列表，将每个节点的左子节点设置为null，右子节点设置为下一个节点，从而将二叉树展开为链表。
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
+ * };
+ */
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        if (!root) {
+            return;
+        }
+        stack<TreeNode*> stk;
+        vector<TreeNode*> L;
+        stk.push(root);
+        while (!stk.empty()) {
+            TreeNode* cur = stk.top();
+            stk.pop();
+            L.push_back(cur);
+
+            if (cur->right) {
+                stk.push(cur->right);
+            }
+            if (cur->left) {
+                stk.push(cur->left);
+            }
+        }
+
+        for (int i = 0; i < L.size()-1; i++) {
+            TreeNode* last = L[i];
+            TreeNode* cur = L[i+1];
+            last->left = nullptr;
+            last->right = cur ;
+        }
+    }
+};
+```
+
+方法二：前序遍历和展开同时进行
+使用pre指针来记录前一个访问的节点，在前序遍历过程中直接修改节点的指针，使得树逐渐展开为链表。
+```cpp
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        if (root == nullptr) {
+            return;
+        }
+        auto stk = stack<TreeNode*>();
+        stk.push(root);
+        TreeNode *prev = nullptr;
+        while (!stk.empty()) {
+            TreeNode *curr = stk.top(); stk.pop();
+            if (prev != nullptr) {
+                prev->left = nullptr;
+                prev->right = curr;
+            }
+            TreeNode *left = curr->left, *right = curr->right;
+            if (right != nullptr) {
+                stk.push(right);
+            }
+            if (left != nullptr) {
+                stk.push(left);
+            }
+            prev = curr;
+        }
+    }
+};
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/solutions/356853/er-cha-shu-zhan-kai-wei-lian-biao-by-leetcode-solu/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+方法三：寻找前驱节点
+使用Morris遍历的思想，在遍历过程中寻找当前节点左子树的前驱节点（最右边的），并将前驱节点的右指针指向当前节点的右子树，从而实现原地展开。
+```cpp
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        TreeNode *curr = root;
+        while (curr != nullptr) {
+            if (curr->left != nullptr) {
+                auto next = curr->left;
+                auto predecessor = next;
+                while (predecessor->right != nullptr) {
+                    predecessor = predecessor->right;
+                }
+                predecessor->right = curr->right;
+                curr->left = nullptr;
+                curr->right = next;
+            }
+            curr = curr->right;
+        }
+    }
+};
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/solutions/356853/er-cha-shu-zhan-kai-wei-lian-biao-by-leetcode-solu/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
