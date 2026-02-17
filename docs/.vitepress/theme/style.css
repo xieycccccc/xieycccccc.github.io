@@ -1,0 +1,17 @@
+/* 给首页添加一个炫酷的渐变光晕背景 */
+.VPLocalNav.home, .VPContent.is-home {
+    background: radial-gradient(circle at top right, rgba(100, 108, 255, 0.15), transparent 40%),
+                radial-gradient(circle at bottom left, rgba(66, 211, 146, 0.15), transparent 40%);
+}
+
+/* 让标题文字变成渐变色 */
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #bd34fe 30%, #41d1ff);
+}
+
+/* 调整评论区的外边距，让它看起来不那么挤 */
+.giscus {
+    margin-top: 2rem;
+    padding: 20px;
+}
