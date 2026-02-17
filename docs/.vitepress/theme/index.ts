@@ -28,11 +28,8 @@ export default {
       return () =>
         h(DefaultTheme.Layout, null, {
           'doc-after': () => h(CommentsWrapper),
-          'home-features-after': () =>
-            h('div',
-              { style: { maxWidth: '1152px', margin: '0 auto', padding: '0 24px' } },
-              [h(CommentsWrapper)]
-            )
+          // 让评论区和卡片同宽对齐（直接用 vp-doc 容器宽度）
+          'home-features-after': () => h(CommentsWrapper)
         })
     }
   })

@@ -11,9 +11,14 @@
 
 /* 调整评论区容器，让它不那么突兀 */
 .giscus-wrapper {
-    margin-top: 3rem;
-    padding: 2rem;
-    /* 给评论区加一个极淡的背景框，让它看起来是一个独立的模块，但又不刺眼 */
-    background: var(--vp-c-bg-soft); 
-    border-radius: 8px;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  padding: 0 0 2rem 0;
+  background: var(--vp-c-bg-soft);
+  border-radius: 8px;
+  box-sizing: border-box;
+  /* 让评论区宽度和内容区一致 */
+  max-width: 1152px;
+  margin-left: auto;
+  margin-right: auto;
 }
