@@ -664,3 +664,317 @@ public:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+
+### 105 . 从前序与中序遍历序列构造二叉树
+方法一：递归
+
+前序遍历：中左右
+中序遍历：左中右
+我们的思路就是：前序遍历的第一个节点就是根节点，在中序遍历中找到这个根节点的位置，那么它左边的部分就是左子树，右边的部分就是右子树。然后我们可以递归地对左子树和右子树进行同样的操作，直到构建完整的二叉树。这题主要是索引很抽象
+而且为了加速查找根节点在中序遍历中的位置，我们可以使用一个哈希表来存储中序遍历中每个值对应的索引，这样我们就可以在O(1)的时间内找到根节点的位置。
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
+ * };
+ */
+class Solution {
+public:
+    unordered_map<int, int> index;
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+
+        int n = preorder.size();
+        for (int i = 0; i < preorder.size(); i++) {
+            index[inorder[i]] = i;
+        }
+        return buildTree_help(preorder, inorder, 0, n - 1, 0, n - 1);
+    }
+
+    TreeNode* buildTree_help(vector<int>& preorder, vector<int>& inorder,
+                             int preorder_left, int preorder_right,
+                             int inorder_left, int inorder_right) {
+        if (preorder_left > preorder_right) {
+            return nullptr;
+        }
+        int inorder_mid = index[preorder[preorder_left]];
+
+        int left_num = inorder_mid - inorder_left;
+        TreeNode* root = new TreeNode(preorder[preorder_left]);
+        root->left = buildTree_help(preorder, inorder, preorder_left + 1,
+                                    preorder_left + left_num, inorder_left,
+                                    inorder_mid - 1);
+        root->right =
+            buildTree_help(preorder, inorder, preorder_left + left_num + 1,
+                           preorder_right, inorder_mid + 1, inorder_right);
+
+        return root;
+    }
+};
+```
+
+方法二：迭代
+神秘迭代法，还没咋看懂
+
+
+### 437 . 路径总和 III
+方法一：DFS
+首先一个直观的想法是这题肯定是遍历树的每个节点，然后以每个节点为起点，计算所有路径的和，看看是否等于目标值。我们可以使用深度优先搜索（DFS）来实现，对于每个节点，先判断是不是目标值，如果是就计数加一，然后对左右子节点继续进行DFS，累加路径和或者传0表示开始新的路径。
+但是这样的问题是会有不连续的路径，比如选取，不选取，选取，这样的非法路径，故想到了一个pick参数，表示当前路径是否已经选取了节点，如果已经选取了节点，那么后续的节点必须要选取，如果没有选取节点，那么后续的节点可以选择是否选取，这样就避免了不连续路径的问题。
+最后测试时题目有很大的数阴了我们一手，直接修改了路径和的类型为long long，避免了整数溢出的问题。
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), lefat(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int number = 0;
+    void pathSum_help(TreeNode* root,long int now_Sum,long int targetSum, bool pick) {
+        if (!root) {
+            return;
+        }
+        if (now_Sum + root->val == targetSum) {
+            //cout << root->val << endl;
+            number++;
+        }
+        now_Sum = now_Sum + root->val;
+        if (pick) {
+            if (root->left) {
+                pathSum_help(root->left, now_Sum, targetSum, true);
+            }
+            if (root->right) {
+                pathSum_help(root->right, now_Sum, targetSum, true);
+            }
+        } else {
+            if (root->left) {
+                pathSum_help(root->left, now_Sum, targetSum,true);
+                pathSum_help(root->left, 0, targetSum,false);
+            }
+            if (root->right) {
+                pathSum_help(root->right, now_Sum,targetSum, true);
+                pathSum_help(root->right, 0,targetSum, false);
+            }
+        }
+        return;
+    }
+
+    int pathSum(TreeNode* root, int targetSum) {
+        pathSum_help(root, 0, targetSum,false);
+        return number;
+    }
+};
+```
+
+标答：
+使用了一个辅助函数rootSum来计算以当前节点为起点的路径和等于目标值的路径数量。对于每个节点，我们先检查以该节点为起点的路径是否满足条件，然后递归地检查左子树和右子树。主函数pathSum则遍历每个节点，调用rootSum来计算以该节点为起点的路径数量，并累加结果。这个递归写法还是有点东西的。
+```cpp
+class Solution {
+public:
+    int rootSum(TreeNode* root, long long targetSum) {
+        if (!root) {
+            return 0;
+        }
+
+        int ret = 0;
+        if (root->val == targetSum) {
+            ret++;
+        } 
+
+        ret += rootSum(root->left, targetSum - root->val);
+        ret += rootSum(root->right, targetSum - root->val);
+        return ret;
+    }
+
+    int pathSum(TreeNode* root, int targetSum) {
+        if (!root) {
+            return 0;
+        }
+        
+        int ret = rootSum(root, targetSum);
+        ret += pathSum(root->left, targetSum);
+        ret += pathSum(root->right, targetSum);
+        return ret;
+    }
+};
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/path-sum-iii/solutions/1021296/lu-jing-zong-he-iii-by-leetcode-solution-z9td/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+方法二：前缀和+哈希表
+使用前缀和的思想，记录从根节点到当前节点的路径和，并使用一个哈希表来存储路径和出现的次数。对于每个节点，我们计算当前路径和，并检查是否存在一个之前的路径和，使得当前路径和减去这个之前的路径和等于目标值。如果存在，则说明从那个之前的节点到当前节点的路径和等于目标值，我们可以将计数器增加对应的次数。然后我们继续递归地遍历左右子树，最后在回溯时将当前路径和从哈希表中移除。
+
+
+### 236 . 二叉树的最近公共祖先
+寻找公共祖先，我想到的是从上往下找，判断p q是否在当前节点的左右子树中，如果在不同的子树中，那么当前节点就是最近公共祖先，如果在同一子树中，那么继续往下找，直到找到公共祖先或者找到其中一个节点。
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool find_x(TreeNode* root, TreeNode* x) {
+        if (!root) {
+            return false;
+        }
+        if (root->val == x->val) {
+            return true;
+        }
+
+        return find_x(root->left,x)||find_x(root->right,x);
+    }
+
+    TreeNode* lowestCommonAncestor_help(TreeNode* root, TreeNode* p,
+                                        TreeNode* q) {
+        if (root->val == p->val ||root->val ==q->val ){
+            return root;
+        }
+        bool p_position = find_x(root->left, p);//
+        bool q_position = find_x(root->left, q);
+
+        if (p_position==q_position ){
+            if (p_position==true){
+                return lowestCommonAncestor_help(root->left,p,q);
+            }else{
+                return lowestCommonAncestor_help(root->right,p,q);
+            }
+        }else{
+            return root;
+        }
+    }
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        return lowestCommonAncestor_help(root,p,q);
+    }
+};
+```
+
+标答：
+```cpp
+class Solution {
+public:
+    TreeNode* ans;
+    bool dfs(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (root == nullptr) return false;
+        bool lson = dfs(root->left, p, q);
+        bool rson = dfs(root->right, p, q);
+        if ((lson && rson) || ((root->val == p->val || root->val == q->val) && (lson || rson))) {
+            ans = root;
+        } 
+        return lson || rson || (root->val == p->val || root->val == q->val);
+    }
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        dfs(root, p, q);
+        return ans;
+    }
+};
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/solutions/238552/er-cha-shu-de-zui-jin-gong-gong-zu-xian-by-leetc-2/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+方法二：哈希存储
+使用一个哈希表来存储每个节点的父节点，然后从p和q开始向上遍历，记录访问过的节点。当两个节点的祖先第一次相遇时，就是它们的最近公共祖先。
+```cpp
+class Solution {
+public:
+    unordered_map<int, TreeNode*> fa;
+    unordered_map<int, bool> vis;
+    void dfs(TreeNode* root){
+        if (root->left != nullptr) {
+            fa[root->left->val] = root;
+            dfs(root->left);
+        }
+        if (root->right != nullptr) {
+            fa[root->right->val] = root;
+            dfs(root->right);
+        }
+    }
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        fa[root->val] = nullptr;
+        dfs(root);
+        while (p != nullptr) {
+            vis[p->val] = true;
+            p = fa[p->val];
+        }
+        while (q != nullptr) {
+            if (vis[q->val]) return q;
+            q = fa[q->val];
+        }
+        return nullptr;
+    }
+};
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/solutions/238552/er-cha-shu-de-zui-jin-gong-gong-zu-xian-by-leetc-2/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+### 124 . 二叉树中的最大路径和
+
+感觉难度不像hard,直接递归即可，只需要明白向上传递和max的计算的不同就好了，向上传递时只能是单边包含当前节点的路径和，并且若为负数直接丢掉，而max的是当前左右的路径和加上当前节点的值，和之前的最大路径和比较取较大值。
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int max_val = -100000;
+    int maxPathSum_help(TreeNode* root) {
+        if (!root) {
+            return 0;
+        }
+        int left_max = maxPathSum_help(root->left);
+        int right_max = maxPathSum_help(root->right);
+        // int now_val =
+        //     max(left_max + root->val + right_max, root->val, left_max,
+        //         right_max, root->val + left_max, root->val + right_max);
+
+        int now_val = left_max + root->val + right_max;
+
+        if (now_val > max_val) {
+            max_val = now_val;
+        }
+        return max(max(left_max + root->val, right_max + root->val),0);
+    }
+    int maxPathSum(TreeNode* root) {
+        maxPathSum_help(root);
+        return max_val;
+    }
+};
+```
