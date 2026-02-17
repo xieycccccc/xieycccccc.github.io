@@ -8,7 +8,7 @@ export default {
   Layout() {
     return h(DefaultTheme.Layout, null, {
       'doc-after': () => h(Giscus, {
-        repo: "xieyccccc/xieycccccc.github.io", 
+        repo: "xieycccccc/xieycccccc.github.io", 
         repoId: "R_kgDOQDZLsg", // 这里需要替换为你自己的 repoId
         category: "Announcements", 
         categoryId: "DIC_kwDOQDZLss4C2oeW", // 这里需要替换为你自己的 categoryId
