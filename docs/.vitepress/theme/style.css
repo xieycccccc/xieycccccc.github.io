@@ -1,17 +1,19 @@
-/* 给首页添加一个炫酷的渐变光晕背景 */
-.VPLocalNav.home, .VPContent.is-home {
-    background: radial-gradient(circle at top right, rgba(100, 108, 255, 0.15), transparent 40%),
-                radial-gradient(circle at bottom left, rgba(66, 211, 146, 0.15), transparent 40%);
-}
+/* 
+   删除了之前的渐变背景代码，回归 VitePress 原生高级黑 
+   如果你想要一点点变化，可以保留下面的标题渐变，不喜欢也可以删掉
+*/
 
-/* 让标题文字变成渐变色 */
+/* 让标题文字变成渐变色 (如果不想要，可以把这段也删了) */
 :root {
   --vp-home-hero-name-color: transparent;
   --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #bd34fe 30%, #41d1ff);
 }
 
-/* 调整评论区的外边距，让它看起来不那么挤 */
-.giscus {
-    margin-top: 2rem;
-    padding: 20px;
+/* 调整评论区容器，让它不那么突兀 */
+.giscus-wrapper {
+    margin-top: 3rem;
+    padding: 2rem;
+    /* 给评论区加一个极淡的背景框，让它看起来是一个独立的模块，但又不刺眼 */
+    background: var(--vp-c-bg-soft); 
+    border-radius: 8px;
 }

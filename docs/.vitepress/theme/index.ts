@@ -1,26 +1,39 @@
 import DefaultTheme from 'vitepress/theme'
-import { h } from 'vue'
+import { h, defineComponent } from 'vue'
 import Giscus from '@giscus/vue'
-import './style.css' 
+import './style.css'
+
+const CommentsWrapper = () =>
+  h('div', { class: 'giscus-wrapper' }, [
+    h(Giscus, {
+      repo: "xieycccccc/xieycccccc.github.io",
+      repoId: "R_kgDOQDZLsg",
+      category: "Announcements",
+      categoryId: "DIC_kwDOQDZLss4C2oeW",
+      mapping: "pathname",
+      strict: '0',
+      reactionsEnabled: '1',
+      emitMetadata: '0',
+      inputPosition: "top",
+      theme: "transparent_dark",
+      lang: "zh-CN",
+      loading: "lazy"
+    })
+  ])
 
 export default {
   extends: DefaultTheme,
-  Layout() {
-    return h(DefaultTheme.Layout, null, {
-      'doc-after': () => h(Giscus, {
-        repo: "xieycccccc/xieycccccc.github.io", 
-        repoId: "R_kgDOQDZLsg", // 这里需要替换为你自己的 repoId
-        category: "Announcements", 
-        categoryId: "DIC_kwDOQDZLss4C2oeW", // 这里需要替换为你自己的 categoryId
-        mapping: "pathname",     
-        strict: "0",
-        reactionsEnabled: "1",   
-        emitMetadata: "0",
-        inputPosition: "top",    
-        theme: "preferred_color_scheme", 
-        lang: "zh-CN",
-        loading: "lazy"
-      })
-    })
-  }
+  Layout: defineComponent({
+    setup() {
+      return () =>
+        h(DefaultTheme.Layout, null, {
+          'doc-after': () => h(CommentsWrapper),
+          'home-features-after': () =>
+            h('div',
+              { style: { maxWidth: '1152px', margin: '0 auto', padding: '0 24px' } },
+              [h(CommentsWrapper)]
+            )
+        })
+    }
+  })
 }
