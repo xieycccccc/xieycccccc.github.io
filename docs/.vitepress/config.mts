@@ -14,7 +14,8 @@ export default defineConfig({
       { text: 'Learning...', link: '/learning' },
       { text: 'LeetCode Hot 100', link: '/leetcode/' },
       { text: 'LLM彻底学习', link: '/llm_study' },
-      {text: '股市研究入门', link: '/money_making'}
+      {text: '股市研究入门', link: '/money_making'},
+      {text:'ComfyUI 学习', link: '/comfyui_learning/'}
     ],
 
     sidebar: {

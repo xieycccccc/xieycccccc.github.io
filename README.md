@@ -51,6 +51,10 @@ Vue前端学习
 
 pip install 包名 -i https://pypi.tuna.tsinghua.edu.cn/simple
 
+### conda 使用
+conda create -n 环境名 python=版本号
+
+
 
 ### HF下载模型
 
