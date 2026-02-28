@@ -402,3 +402,73 @@ public:
     }
 };
 ```
+
+
+### 208 实现 Trie (前缀树)
+
+这题...真没想出来，不过看完答案后感觉这个string只由26个小写字母组成是关键
+
+答案思路好巧妙，是一个类似26叉树，插入时不断扩展，查询时不断往下走，如果走到最后了还没有找到，就说明没有这个单词了，前缀也是一样的
+
+
+```cpp
+class Trie {
+    //在private 里面，安全
+private:
+    bool isend;
+    Trie* next[26];//初始化指针数组，避免野指针问题
+public:
+    Trie() {
+        isend = false;
+        memset(next, 0, sizeof(next));
+    }
+
+    void insert(string word) {
+        Trie* node = this;
+        for (char s : word) {
+            
+            
+            s -= 'a';
+            if (node->next[s]==NULL){
+                node->next[s] = new Trie();
+            }
+            node = node->next[s];
+        }
+        node->isend = true;
+    }
+
+    bool search(string word) {
+
+        Trie* node = this ;
+        for (char s:word){
+            s -='a';
+            if  (node->next[s]==NULL){
+                return false;
+            }
+            node = node->next[s];
+        }
+        return node->isend;
+
+    }
+
+    bool startsWith(string prefix) {
+        Trie* node = this ;
+        for (char s:prefix){
+            s -='a';
+            node = node->next[s];
+            if (node==NULL){
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie* obj = new Trie();
+ * obj->insert(word);
+ * bool param_2 = obj->search(word);
+ * bool param_3 = obj->startsWith(prefix);
+ */
+```

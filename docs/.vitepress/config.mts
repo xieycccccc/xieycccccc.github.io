@@ -61,6 +61,7 @@ export default defineConfig({
             {text:'链表', link: '/leetcode/linked-list' },
             {text:'二叉树', link: '/leetcode/binary-tree' },
             {text:'图', link: '/leetcode/graph'},
+            {text:'回溯', link: '/leetcode/backtracking'},
           ]
         }
       ],
